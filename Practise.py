@@ -17,33 +17,40 @@ class FirstOne(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 # A list of all the frames that there is to choose from
         self.frames = {}
-        for F in (StartPage, ):
-            # page_name is just the frame that is chosen to be used
-            page_name = F.__name__
-            frame = F(parent=container, controller=self)
-            self.frames[page_name] = frame
+        for F in (StartPage, PageOne):
+            frame = F(container, self)
+            self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 # Runs the function made to show frame
-        self.show_frame("StartPage")
+        self.show_frame(StartPage)
 # Function to show frame
 
-    def show_frame(self, page_name):
-        frame = self.frames[page_name]
+    def show_frame(self, cont):
+        frame = self.frames[cont]
         frame.tkraise()
 
 
-# the start page3
+# the start page
 class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        self.controller = controller
-        l1 = tk.Label(self, text="I hope this worked!")
+        l1 = tk.Button(self, text="Visit Page 1",
+                       command=lambda: controller.show_frame(PageOne))
+        l1.pack(side='top')
+
+
+class PageOne(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        l1 = tk.Button(self, text="Back to Home",
+                       command=lambda: controller.show_frame(StartPage))
         l1.pack(side='top')
 
 
 # Just to run the entire app
-if __name__ == "__main__":
-    App = FirstOne()
-    App.geometry("500x500")
-    App.mainloop()
+App = FirstOne()
+App.title("Test")
+App.geometry("500x500")
+App.mainloop()
